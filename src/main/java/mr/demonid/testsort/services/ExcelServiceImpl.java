@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -30,20 +32,29 @@ public class ExcelServiceImpl implements ExcelService {
 
     /*
      * Читает значения мз файла в список.
+     * Для исключения дубликатов читаем во множество, а затем просто преобразуем в список.
      */
     private List<Integer> readNumbers(String path) throws Exception {
-        List<Integer> list = new ArrayList<>();
+        Set<Integer> numbers = new HashSet<>();
+
         try (FileInputStream fis = new FileInputStream(path);
              Workbook workbook = new XSSFWorkbook(fis)) {
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
                 Cell cell = row.getCell(0);
-                if (cell != null && cell.getCellType() == CellType.NUMERIC) {
-                    list.add((int) cell.getNumericCellValue());
+                if (cell != null) {
+                    switch (cell.getCellType()) {
+                        case NUMERIC -> numbers.add((int) cell.getNumericCellValue());
+                        case STRING -> {
+                            try {
+                                numbers.add(Integer.parseInt(cell.getStringCellValue().trim()));
+                            } catch (NumberFormatException ignored) {}
+                        }
+                    }
                 }
             }
         }
-        return list;
+        return new ArrayList<>(numbers);
     }
 
 }

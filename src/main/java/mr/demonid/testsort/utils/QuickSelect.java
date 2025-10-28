@@ -23,14 +23,14 @@ public class QuickSelect {
             return select(array, pivotIndex + 1, right, k);
     }
 
-
     /*
      * Разделяем массив по опорному элементу. Слева будут элементы меньше pivot, справа - больше.
      * Но, элементы не сортируются!
      * @return индекс опорного элемента.
      */
     private static int partition(int[] array, int left, int right) {
-        int pivot = array[right];
+        // выбираем опорник из трех значений
+        int pivot = medianOfThree(array[left], array[left + (right - left) / 2], array[right]);
         int i = left;
         for (int j = left; j < right; j++) {
             if (array[j] <= pivot) {
@@ -46,6 +46,17 @@ public class QuickSelect {
         int temp = array[i];
         array[i] = array[j];
         array[j] = temp;
+    }
+
+    /*
+     * Выборка среднего значения.
+     */
+    private static int medianOfThree(int a, int b, int c) {
+        if ((b >= a && b <= c) || (b >= c && b <= a))
+            return b;
+        else if ((a >= b && a <= c) || (a >= c && a <= b))
+            return a;
+        else return c;
     }
 
 }
