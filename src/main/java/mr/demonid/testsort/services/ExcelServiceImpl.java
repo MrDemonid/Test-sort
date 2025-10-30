@@ -1,6 +1,7 @@
 package mr.demonid.testsort.services;
 
 import mr.demonid.testsort.utils.QuickSelect;
+import mr.demonid.testsort.utils.QuickSelectFast;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,7 @@ public class ExcelServiceImpl implements ExcelService {
         if (n < 1 || n > numbers.size())
             throw new IllegalArgumentException("Некорректное значение N.");
 
-        int[] array = numbers.stream().mapToInt(Integer::intValue).toArray();
-
-        int[] arr = array.clone();
-        Integer res = QuickSelect.select(array, 0, array.length - 1, n - 1);
-        return res;
+        return QuickSelectFast.select(numbers.stream().mapToInt(Integer::intValue).toArray(), n - 1);
     }
 
     /*
