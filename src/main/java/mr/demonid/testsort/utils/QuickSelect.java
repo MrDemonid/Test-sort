@@ -1,6 +1,8 @@
 package mr.demonid.testsort.utils;
 
 
+import java.util.Arrays;
+
 /**
  * Утилитарный класс нахождения минимума: Quickselect.
  * Основано на Quicksort, но рекурсивно сортирует только половину массива.
@@ -14,7 +16,7 @@ public class QuickSelect {
             return array[left];
 
         int pivotIndex = partition(array, left, right); // опорный элемент
-
+        System.out.println("  -- " + Arrays.toString(array));
         if (k == pivotIndex)    // нашли искомый элемент
             return array[k];
         else if (k < pivotIndex)
@@ -30,7 +32,9 @@ public class QuickSelect {
      */
     private static int partition(int[] array, int left, int right) {
         // выбираем опорник из трех значений
-        int pivot = medianOfThree(array[left], array[left + (right - left) / 2], array[right]);
+        int pivotIndex = medianOfThree(array, left, left + (right - left) / 2, right);
+        int pivot = array[pivotIndex];
+        swap(array, pivotIndex, right);
         int i = left;
         for (int j = left; j < right; j++) {
             if (array[j] <= pivot) {
@@ -51,12 +55,11 @@ public class QuickSelect {
     /*
      * Выборка среднего значения.
      */
-    private static int medianOfThree(int a, int b, int c) {
-        if ((b >= a && b <= c) || (b >= c && b <= a))
-            return b;
-        else if ((a >= b && a <= c) || (a >= c && a <= b))
-            return a;
-        else return c;
+    private static int medianOfThree(int[] array, int a, int b, int c) {
+        int x = array[a], y = array[b], z = array[c];
+        if ((x - y) * (z - x) >= 0) return a; // x медиана
+        else if ((y - x) * (z - y) >= 0) return b; // y медиана
+        else return c; // z медиана
     }
 
 }

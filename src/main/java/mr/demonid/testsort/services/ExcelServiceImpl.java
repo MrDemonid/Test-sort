@@ -6,10 +6,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -27,7 +24,9 @@ public class ExcelServiceImpl implements ExcelService {
 
         int[] array = numbers.stream().mapToInt(Integer::intValue).toArray();
 
-        return QuickSelect.select(array, 0, array.length - 1, n - 1);
+        int[] arr = array.clone();
+        Integer res = QuickSelect.select(array, 0, array.length - 1, n - 1);
+        return res;
     }
 
     /*
